@@ -22,7 +22,6 @@ export class EarthquakesListComponent implements OnInit {
   earthquakes: Earthquake[] = [];
   // http://localhost:5000/
   apiUrl: string = 'https://aq0n090pg2.execute-api.us-east-1.amazonaws.com/dev';
-  earthquakesObservable: Observable;
 
   constructor(private httpClient: HttpClient) { }
 
@@ -32,7 +31,7 @@ export class EarthquakesListComponent implements OnInit {
     ]
 
     console.info('Fetching GET', this.apiUrl + '/earthquakes', '...');
-    this.earthquakesObservable = this.httpClient.get(this.apiUrl + '/earthquakes')
+    this.httpClient.get(this.apiUrl + '/earthquakes')
       .subscribe((response: any) => {
         console.debug('Response:', response);
         this.earthquakes = response._embedded.earthquakes;
