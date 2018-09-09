@@ -23,7 +23,7 @@
         </div>
         <div class="visited-pages-count" style="width: 15rem">
           <div class="title">Origin Time</div>
-          <div class="value"><small>{{ earthquake.originTime | date : 'yyyy-MM-dd HH:mm:ss'}}</small></div>
+          <div class="value"><small>{{ earthquake.originTime | date : 'yyyy-MM-dd HH:mm:ss ZZZ' : 'UTC'}}</small></div>
         </div>
         <div class="visited-pages-count" style="width: 10rem">
           <div class="title">Magnitude <small>(M<sub>W</sub>)</small></div>

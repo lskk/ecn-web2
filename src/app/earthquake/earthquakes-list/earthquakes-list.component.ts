@@ -1,15 +1,14 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { NbThemeService } from '@nebular/theme';
-import { takeWhile } from 'rxjs/operators';
 import { HttpClient, HttpParams } from '@angular/common/http';
 
 export class Earthquake {
   id: string;
   name: string;
   originTime: string;
-  mw: float;
-  depth: float;
+  mw: number;
+  usgsDepth: number;
   noaaTsunami: boolean;
 }
 
@@ -21,21 +20,24 @@ export class Earthquake {
 export class EarthquakesListComponent implements OnInit {
 
   earthquakes: Earthquake[] = [];
+  // http://localhost:5000/
+  apiUrl: string = 'https://aq0n090pg2.execute-api.us-east-1.amazonaws.com/dev';
+  earthquakesObservable: Observable;
 
   constructor(private httpClient: HttpClient) { }
 
   ngOnInit() {
     this.earthquakes = [
-      {id: 'abc', 'name': 'Yudhu', originTime: '123', mw: 7.5, usgsDepth: 25, noaaTsunami: false},
-      {id: 'ab2', 'name': 'Yudhu', originTime: '123', mw: 8.1, usgsDepth: 75.5, noaaTsunami: true},
+      {id: null, 'name': 'Loading...', originTime: null, mw: null, usgsDepth: null, noaaTsunami: null},
     ]
 
-    this.earthquakesObservable = this.httpClient.get('http://localhost:5000/earthquakes')
-      .subscribe((response) => {
+    console.info('Fetching GET', this.apiUrl + '/earthquakes', '...');
+    this.earthquakesObservable = this.httpClient.get(this.apiUrl + '/earthquakes')
+      .subscribe((response: any) => {
         console.debug('Response:', response);
         this.earthquakes = response._embedded.earthquakes;
         this.earthquakes.forEach(x => {
-          x.originTime = moment(x.originTime);
+          //x.originTime = moment(x.originTime);
         })
       });
   }
