@@ -30,7 +30,7 @@ import {
   SwitcherComponent,
   LayoutDirectionSwitcherComponent,
   ThemeSwitcherComponent,
-  TinyMCEComponent,
+  // TinyMCEComponent,
   ThemeSwitcherListComponent,
 } from './components';
 import {
@@ -79,7 +79,7 @@ const COMPONENTS = [
   FooterComponent,
   SearchInputComponent,
   ThemeSettingsComponent,
-  TinyMCEComponent,
+  // TinyMCEComponent,
   OneColumnLayoutComponent,
   SampleLayoutComponent,
   ThreeColumnsLayoutComponent,
