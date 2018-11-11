@@ -1,3 +1,36 @@
+<nb-card size="large">
+    <nb-card-header>
+      <span>Tsunami Potential Prediction</span>
+    </nb-card-header>
+    <nb-card-body>
+      <form class="m-4">
+        <div class="form-group">
+          <label>Rupture duration, in seconds (<i>T<sub>0</sub></i>)</label>
+          <input type="number" class="form-control" placeholder="Unnormalized rupture duration"
+            value="76.21047386"/>
+        </div>
+        <div class="form-group">
+          <label>P-wave dominant period, in seconds (<i>T<sub>d</sub></i>)</label>
+          <input type="number" class="form-control" placeholder="Unnormalized P-wave dominant period"
+            value="3.484952633"/>
+        </div>
+        <div class="form-group">
+          <label>Moment magnitude (<i>M<sub>w</sub></i>)</label>
+          <input type="number" class="form-control" placeholder="Unnormalized moment magnitude"
+            value="7.4894408801871"/>
+        </div>
+        <button type="submit" class="btn btn-primary">Predict</button>
+      </form>
+      <div class="m-4">
+        <p><strong>Prediction</strong></p>
+        <p><strong style="color: red">Tsunami-Yes</strong> = 0.3773287236690521</p>
+        <p><strong style="color: green">Tsunami-No</strong> = 0.7557135224342346</p>
+        <p>Result: <strong style="color: green">No Tsunami Potential</strong></p>
+      </div>
+    </nb-card-body>
+  </nb-card>
+  
+
 <nb-card size="xxlarge">
   <nb-card-header>
     <span>Earthquakes</span>

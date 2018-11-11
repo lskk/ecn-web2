@@ -8,10 +8,12 @@ import { HttpClientModule } from '@angular/common/http';
 import { NbThemeModule } from '@nebular/theme';
 import { SomePageModule } from './some-page/some-page.module';
 import { EarthquakeModule } from './earthquake/earthquake.module';
+import { TsunamiPotentialPageComponent } from './tsunami-potential-page/tsunami-potential-page.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    TsunamiPotentialPageComponent
   ],
   imports: [
     BrowserModule,

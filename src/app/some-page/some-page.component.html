@@ -1,7 +1,10 @@
 <nb-layout>
   <nb-layout-header fixed>ECN</nb-layout-header>
 
-  <nb-sidebar>Earthquakes</nb-sidebar>
+  <nb-sidebar>
+    <p>Earthquakes</p>
+    <p><a [routerLink]="['/tsunami-potential']">Tsunami Potential</a></p>
+  </nb-sidebar>
 
   <nb-layout-column>
     <app-earthquakes-list></app-earthquakes-list>
