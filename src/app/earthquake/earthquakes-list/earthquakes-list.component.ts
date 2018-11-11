@@ -20,9 +20,8 @@ export class Earthquake {
 export class EarthquakesListComponent implements OnInit {
 
   earthquakes: Earthquake[] = [];
-  // http://localhost:5000/
-  apiUrl: string = 'http://localhost:5000';
-  // apiUrl: string = 'https://aq0n090pg2.execute-api.us-east-1.amazonaws.com/dev';
+  // apiUrl: string = 'http://localhost:5000';
+  apiUrl: string = 'https://aq0n090pg2.execute-api.us-east-1.amazonaws.com/dev';
 
   constructor(private httpClient: HttpClient) { }
 
