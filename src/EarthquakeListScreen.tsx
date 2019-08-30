@@ -6,7 +6,10 @@ import {
   Toolbar,
   Typography,
   withStyles,
-  Theme
+  Theme,
+  Card,
+  CardContent,
+  CircularProgress
 } from "@material-ui/core";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 import FavoriteIcon from "@material-ui/icons/Favorite";
@@ -18,36 +21,37 @@ import appConfig from "./appConfig.json";
 
 const styles = (theme: Theme) => ({
   attractionCategoryItem: {
-    textAlign: "center",
+    // textAlign: "center",
     display: "flex"
   },
-  attractionPaper: {
+  quakeCard: {
     flex: 1,
-    backgroundColor: theme.palette.grey[800],
-    color: theme.palette.common.white,
-    backgroundSize: "cover",
-    backgroundRepeat: "no-repeat",
-    backgroundPosition: "center",
-    display: "flex",
-    flexDirection: "column",
-    padding: "1rem",
-    height: "12rem",
-    textDecoration: "none"
+    // backgroundColor: theme.palette.grey[800],
+    // color: theme.palette.common.white,
+    // backgroundSize: "cover",
+    // backgroundRepeat: "no-repeat",
+    // backgroundPosition: "center",
+    // display: "flex",
+    // flexDirection: "column",
+    // padding: "1rem",
+    // height: "12rem",
+    textDecoration: "none",
   }
 });
 
-class EarthquakeListScreen extends React.Component {
+class EarthquakeListScreen extends React.Component<any, any> {
   constructor(props: any) {
     super(props);
     this.state = {
       attractionCategory: undefined,
-      attractions: []
+      earthquakes: [],
+      loading: false
     };
   }
 
   componentDidMount() {
     this.fetchAttractionCategory();
-    this.fetchAttractions();
+    this.fetchQuakes();
   }
 
   async fetchAttractionCategory() {
@@ -68,7 +72,7 @@ class EarthquakeListScreen extends React.Component {
     }); */
   }
 
-  async fetchAttractions() {
+  async fetchQuakes() {
     /* this.setState({
       attractions: [
         {
@@ -94,21 +98,25 @@ class EarthquakeListScreen extends React.Component {
         }
       ]
     }); */
+    this.setState({loading: true});
+    try {
+      const quakesUrl = `${appConfig.qzApiUrl}/earthquakes`;
+      console.info("Fetching", quakesUrl, "...");
+      const resp = await fetch(quakesUrl, { method: "GET" });
+      const json = await resp.json();
+      this.setState({
+        earthquakes: json._embedded.earthquakes
+      });     
+    } finally {
+      this.setState({loading: false});
+    }
     /* const { cityId, attractionCategoryId } = this.props.match.params;
-    const searchUrl = `${
-      appConfig.travelApiUrl
-    }/attractions/search/findAllByCityIdAndAttractionCategoryId?cityId=${cityId}&attractionCategoryId=${attractionCategoryId}`;
-    console.info("Fetching", searchUrl, "...");
-    const resp = await fetch(searchUrl, { method: "GET" });
-    const json = await resp.json();
-    this.setState({
-      attractions: json._embedded.attractions
-    }); */
+*/
   }
 
   render() {
     const { classes, match, location, history } = this.props as any;
-    const { attractionCategory, attractions } = this.state as any;
+    const { earthquakes } = this.state as any;
     const { cityId, attractionCategoryId } = match.params;
     return (
       <div style={{ display: "flex", flex: 1 }}>
@@ -134,41 +142,39 @@ class EarthquakeListScreen extends React.Component {
           container
           style={{
             margin: "4.5rem 0.5rem 0.5rem 0.5rem",
-            alignContent: "baseline"
+            alignContent: "baseline",
+            justifyContent: "center"
           }}
           spacing={1}
         >
-          {attractions.map((attraction: any) => (
+          {this.state.loading && <CircularProgress />}
+          {earthquakes.map((quake: any) => (
             <Grid
               item
-              key={attraction.id}
+              key={quake.id}
               xs={12}
               md={6}
               className={classes.attractionCategoryItem}
             >
-              // @ts-ignore
-              <Paper
+              {/* 
+              // @ts-ignore */}
+              <Card
                 component={Link as any}
-                to={`/cities/${cityId}/attractions/${attraction.id}`}
-                className={classes.attractionPaper}
+                to={`/cities/${cityId}/attractions/${quake.id}`}
+                className={classes.quakeCard}
                 style={{
-                  backgroundImage: `linear-gradient( rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2) ), url(https://placeimg.com/640/480/arch?t=${
-                    attraction.fileName
-                  })`
+                  
                 }}
               >
-                <FavoriteIcon
-                  color={attraction.favorited ? "secondary" : "inherit"}
-                  style={{ alignSelf: "flex-end" }}
-                />
-                <div style={{ flex: 1 }} />
-                <Typography variant="body1" style={{ textAlign: "left" }}>
-                  {attraction.name}
-                </Typography>
-                <Typography variant="caption" style={{ textAlign: "left" }}>
-                  {attraction.subtitle}
-                </Typography>
-              </Paper>
+                <CardContent>
+                  <Typography variant="body1" style={{ textAlign: "left" }}>
+                    {quake.name}
+                  </Typography>
+                  <Typography variant="caption" style={{ textAlign: "left" }}>
+                    {quake.originTime}
+                  </Typography>
+                </CardContent>
+              </Card>
             </Grid>
           ))}
         </Grid>

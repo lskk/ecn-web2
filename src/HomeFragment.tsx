@@ -39,6 +39,7 @@ import {
         cityId: 1,
         city: {},
         backgroundImageUrl: undefined,
+        weather: {},
       };
     }
   
@@ -77,6 +78,22 @@ import {
       }); */
   
       // Mengambil nilai cityId
+      const cityQ = "Bandung,ID";
+      const weatherUrl =
+        `https://api.openweathermap.org/data/2.5/weather?q=${cityQ}&units=metric&appid=${appConfig.openWeatherApiKey}`;
+      console.info("Fetching", weatherUrl, "...");
+      try {
+        // Send GET request ke Travel API Service
+        const resp = await fetch(weatherUrl, {method: "GET"});
+        // Parse data dari format JSON menjadi JavaScript object
+        const weather = await resp.json();
+        // Mengupdate state component React berdasarkan data tsb. (otomatis mengupdate UI)
+        this.setState({
+          weather: weather,
+        });
+      } catch (e) {
+        console.error("Error:", e);
+      }
     //   const { cityId } = this.state;
     //   // Menyiapkan URL untuk API "Get city with related"
     //   const cityUrl =
@@ -100,16 +117,17 @@ import {
   
     render() {
       const { classes, match, location, history } = this.props as any;
-      const { city } = this.state as any;
-      const cityTime = format(utcToZonedTime(new Date(), "Europe/Rome"), "hh:mm aa");
-      const cityDate = format(utcToZonedTime(new Date(), "Europe/Rome"), "MMM d, yyyy");
+      const { city, weather } = this.state as any;
+      const cityTime = format(utcToZonedTime(new Date(), "Asia/Jakarta"), "hh:mm aa");
+      const cityDate = format(utcToZonedTime(new Date(), "Asia/Jakarta"), "MMM d, yyyy");
       return (
         <Box
           style={{display: "flex", flexDirection: "column", height: "100%", width: "100%"}}>
             
           <Grid container direction="column" justify="space-around" alignItems="center"
             style={{height: "100%", 
-              backgroundImage: `linear-gradient( rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2) )`}}
+              backgroundImage: `linear-gradient( rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4) ),
+                url(https://upload.wikimedia.org/wikipedia/commons/f/f4/Mesjid_Agung_Bandung.JPG)`}}
             className={classes.mainFeaturedPost}>
             <Grid item style={{ flex: 2 }} />
             <Grid item>
@@ -141,8 +159,8 @@ import {
                   <Typography variant="caption" style={{ textTransform: "uppercase" }}>
                     Today
                   </Typography>
-                  <Typography variant="h5">{city.temperatureCelsius}°C</Typography>
-                  <Typography variant="caption">{city.weather}</Typography>
+                  <Typography variant="h5">{weather.main && weather.main.temp}°C</Typography>
+                  <Typography variant="caption">{weather.weather && weather.weather[0].main} ({weather.weather && weather.weather[0].description})</Typography>
                 </Grid>
               </Grid>
             </Grid>
