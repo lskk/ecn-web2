@@ -1,25 +1,39 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { Container, makeStyles } from "@material-ui/core";
+import React from "react";
+import "typeface-roboto";
+import "./App.css";
+import { BrowserRouter as Router, Route } from "react-router-dom";
+import HomeFragment from "./HomeFragment";
+// import AttractionCategoriesFragment from "./AttractionCategoriesFragment";
+import EarthquakeListScreen from "./EarthquakeListScreen";
+import TsunamiListScreen from "./TsunamiListScreen";
+// import AttractionDetailFragment from "./AttractionDetailFragment";
 
-const App: React.FC = () => {
+const useStyles = makeStyles(theme => ({
+  root: {
+    padding: 0,
+    width: "100%"
+    // display: "flex",
+    // flexDirection: "column",
+    // flex: 1,
+    // flexGrow: 1,
+    // height: "100%",
+  }
+}));
+
+function App() {
+  const classes = useStyles();
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <Container className={classes.root}>
+        <Route exact path="/" component={HomeFragment} />
+        <Route exact path="/earthquakes" component={EarthquakeListScreen} />
+        <Route exact path="/tsunamis" component={TsunamiListScreen} />
+        {/* <Route exact path="/cities/:cityId/attractionCategories" component={AttractionCategoriesFragment} />
+        <Route path="/cities/:cityId/attractionCategories/:attractionCategoryId" component={AttractionCategoryDetailFragment} />
+        <Route path="/cities/:cityId/attractions/:attractionId" component={AttractionDetailFragment} /> */}
+      </Container>
+    </Router>
   );
 }
 
