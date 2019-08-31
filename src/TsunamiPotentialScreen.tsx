@@ -9,7 +9,10 @@ import {
   Theme,
   Card,
   CardContent,
-  CircularProgress
+  CircularProgress,
+  Input,
+  TextField,
+  Button
 } from "@material-ui/core";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 import FavoriteIcon from "@material-ui/icons/Favorite";
@@ -39,20 +42,21 @@ const styles = (theme: Theme) => ({
   }
 });
 
-class TsunamiListScreen extends React.Component<any, any> {
+class TsunamiPotentialScreen extends React.Component<any, any> {
   constructor(props: any) {
     super(props);
     this.state = {
       attractionCategory: undefined,
       earthquakes: [],
       loading: false,
-      tsunamiEvents: [],
+      t0: 5.0, td: 5.0, mw: 9.0,
+      prediction: {},
     };
   }
 
   componentDidMount() {
-    this.fetchAttractionCategory();
-    this.fetchQuakes();
+    // this.fetchAttractionCategory();
+    // this.fetchQuakes();
   }
 
   async fetchAttractionCategory() {
@@ -101,12 +105,12 @@ class TsunamiListScreen extends React.Component<any, any> {
     }); */
     this.setState({loading: true});
     try {
-      const quakesUrl = `${appConfig.qzApiUrl}/tsunamiEvents`;
+      const quakesUrl = `${appConfig.qzApiUrl}/earthquakes`;
       console.info("Fetching", quakesUrl, "...");
       const resp = await fetch(quakesUrl, { method: "GET" });
       const json = await resp.json();
       this.setState({
-        tsunamiEvents: json._embedded.tsunamiEvents
+        earthquakes: json._embedded.earthquakes
       });     
     } finally {
       this.setState({loading: false});
@@ -115,9 +119,25 @@ class TsunamiListScreen extends React.Component<any, any> {
 */
   }
 
+  async predict() {
+    const req = {t0: this.state.t0, td: this.state.td, mw: this.state.mw};
+    console.info("Request:", req);
+    const predictUrl = `${appConfig.qzApiUrl}/tsunamiPotential/predict`;
+    const resp = await fetch(predictUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(req),
+    });
+    const json = await resp.json();
+    console.info("Prediction:", json);
+    this.setState({prediction: json});
+  }
+
   render() {
     const { classes, match, location, history } = this.props as any;
-    const { tsunamiEvents } = this.state as any;
+    const { earthquakes } = this.state as any;
     const { cityId, attractionCategoryId } = match.params;
     return (
       <div style={{ display: "flex", flex: 1 }}>
@@ -132,7 +152,7 @@ class TsunamiListScreen extends React.Component<any, any> {
               <ArrowBackIcon />
             </IconButton>
             <Typography variant="h6" style={{ flexGrow: 1 }}>
-              Tsunami Events
+              Tsunami Potential
             </Typography>
             {/* <IconButton edge="end" color="inherit" aria-label="map">
               <MapIcon />
@@ -144,47 +164,27 @@ class TsunamiListScreen extends React.Component<any, any> {
           style={{
             margin: "4.5rem 0.5rem 0.5rem 0.5rem",
             alignContent: "baseline",
-            justifyContent: "center"
+            justifyContent: "left"
           }}
           spacing={1}
         >
-          {this.state.loading && <CircularProgress />}
-          {tsunamiEvents.map((tsunamiEvent: any) => (
-            <Grid
-              item
-              key={tsunamiEvent.id}
-              xs={12}
-              md={6}
-              className={classes.attractionCategoryItem}
-            >
-              {/* 
-              // @ts-ignore */}
-              <Card
-                component={Link as any}
-                to={`/cities/${cityId}/attractions/${tsunamiEvent.id}`}
-                className={classes.quakeCard}
-                style={{
-                  
-                }}
-              >
-                <CardContent>
-                  <Typography variant="body1" style={{ textAlign: "left" }}>
-                    {tsunamiEvent.LOCATION_NAME}, {tsunamiEvent.COUNTRY}
-                  </Typography>
-                  <Typography variant="caption" style={{ textAlign: "left" }}>
-                    {tsunamiEvent.YEAR}-{tsunamiEvent.MONTH}-{tsunamiEvent.DAY} {tsunamiEvent.HOUR}:{tsunamiEvent.MINUTE}:{tsunamiEvent.SECOND} UTC - Magnitude: {tsunamiEvent.PRIMARY_MAGNITUDE}
-                  </Typography>
-                  <Typography variant="caption" style={{ textAlign: "left" }}>
-                    - Max water height: {tsunamiEvent.MAXIMUM_WATER_HEIGHT} m
-                  </Typography>
-                </CardContent>
-              </Card>
-            </Grid>
-          ))}
+          <form>
+          <TextField value={this.state.t0} label="t0"
+            onChange={e => this.setState({t0: e.target.value})} />
+          <TextField value={this.state.td} label="td"
+            onChange={e => this.setState({td: e.target.value})} />
+          <TextField value={this.state.mw} label="mw"
+            onChange={e => this.setState({mw: e.target.value})} />
+          <div>
+            <Button variant="contained" onClick={() => this.predict()}>Predict</Button>
+          </div>
+          </form>
+          <Typography style={{display: "block"}}>Tsunami - No? {this.state.prediction.tsunamiNo}</Typography>
+          <Typography style={{display: "block"}}>Tsunami - Yes? {this.state.prediction.tsunamiYes}</Typography>
         </Grid>
       </div>
     );
   }
 }
 
-export default withRouter(withStyles(styles as any)(TsunamiListScreen) as any);
+export default withRouter(withStyles(styles as any)(TsunamiPotentialScreen) as any);

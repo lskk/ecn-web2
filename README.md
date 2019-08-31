@@ -1,5 +1,22 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+## src/appConfig.json
+
+Using localhost (from `tews/ecn-svc`):
+
+    {
+        "qzApiUrl": "http://localhost:5000",
+        "openWeatherApiKey": "..."
+    }
+
+Using AWS Lambda:
+
+    {
+        "qzApiUrl": "https://aq0n090pg2.execute-api.us-east-1.amazonaws.com/dev",
+        "openWeatherApiKey": "..."
+    }
+
+
 ## Available Scripts
 
 In the project directory, you can run:

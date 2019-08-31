@@ -10,6 +10,7 @@ import {
   import MenuIcon from "@material-ui/icons/Menu";
   import PublicIcon from "@material-ui/icons/Public";
   import OpacityIcon from "@material-ui/icons/Opacity";
+  import HelpIcon from "@material-ui/icons/Help";
   import React from "react";
   import { withRouter } from "react-router";
   import "typeface-roboto";
@@ -37,7 +38,12 @@ import {
       super(props);
       this.state = {
         cityId: 1,
-        city: {},
+        city: {
+          country: {
+            name: "Indonesia"
+          },
+          name: "Bandung",
+        },
         backgroundImageUrl: undefined,
         weather: {},
       };
@@ -174,6 +180,8 @@ import {
               label="Earthquakes" icon={<PublicIcon />} />
             <BottomNavigationAction value="/tsunamis"
               label="Tsunamis" icon={<OpacityIcon />} />
+            <BottomNavigationAction value={`/tsunamiPotential`}
+              label="Tsunami Potential" icon={<HelpIcon />} />
           </BottomNavigation>
         </Box>
       );
