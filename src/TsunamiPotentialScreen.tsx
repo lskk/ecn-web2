@@ -49,7 +49,9 @@ class TsunamiPotentialScreen extends React.Component<any, any> {
       attractionCategory: undefined,
       earthquakes: [],
       loading: false,
-      t0: 5.0, td: 5.0, mw: 9.0,
+      t0: 5.1, 
+      td: 5.1,
+      mw: 8.4,
       prediction: {},
     };
   }
@@ -120,7 +122,11 @@ class TsunamiPotentialScreen extends React.Component<any, any> {
   }
 
   async predict() {
-    const req = {t0: this.state.t0, td: this.state.td, mw: this.state.mw};
+    const req = {
+      t0: parseFloat(this.state.t0), 
+      td: parseFloat(this.state.td), 
+      mw: parseFloat(this.state.mw)
+    };
     console.info("Request:", req);
     const predictUrl = `${appConfig.qzApiUrl}/tsunamiPotential/predict`;
     const resp = await fetch(predictUrl, {
@@ -179,8 +185,8 @@ class TsunamiPotentialScreen extends React.Component<any, any> {
             <Button variant="contained" onClick={() => this.predict()}>Predict</Button>
           </div>
           </form>
-          <Typography style={{display: "block"}}>Tsunami - No? {this.state.prediction.tsunamiNo}</Typography>
-          <Typography style={{display: "block"}}>Tsunami - Yes? {this.state.prediction.tsunamiYes}</Typography>
+          <Typography style={{display: "block"}}>No tsunami? {this.state.prediction.tsunamiNo}</Typography>
+          <Typography style={{display: "block"}}>Tsunami will happen? {this.state.prediction.tsunamiYes}</Typography>
         </Grid>
       </div>
     );
