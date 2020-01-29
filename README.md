@@ -1,3 +1,11 @@
+# ecn-web2
+
+## Project Status
+
+`ecn-web2` has been obsoleted by [quakezone-next](https://github.com/pptik/quakezone-next).
+
+## CRA
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## src/appConfig.json
